@@ -12,11 +12,6 @@ import re
 import numpy as np
 
 # Load mô hình và data
-# model = joblib.load('E:/CodeFolder/Github_project/Offline_Cooking_Chatbot/recipe_model.pkl')
-# vectorizer = joblib.load('E:/CodeFolder/Github_project/Offline_Cooking_Chatbot/vectorizer.pkl')
-# X = joblib.load('E:/CodeFolder/Github_project/Offline_Cooking_Chatbot/features_matrix.pkl')
-# df = pd.read_pickle('E:/CodeFolder/Github_project/Offline_Cooking_Chatbot/recipes_df.pkl')
-
 model = joblib.load('recipe_model.pkl')
 vectorizer = joblib.load('vectorizer.pkl')
 X = joblib.load('features_matrix.pkl')
@@ -42,7 +37,7 @@ def map_user_ingredients(ingredients):
             mapped.append(clean_ing)
     return mapped
 
-def suggest_recipes(user_ingredients, top_k=3, use_supervised=False):
+def suggest_recipes(user_ingredients, top_k=5, use_supervised=False):
     user_raw = map_user_ingredients(user_ingredients)
     if not user_raw:
         return [], []  # Trả empty để bot handle
@@ -74,7 +69,7 @@ print("Hi! I am Smart Recipe Buddy offline. Type 'quit' to stop.")
 while True:
     user_input = input("What ingredients do you have? (Ex: ga, ca rot, hanh): ").strip()
     if user_input.lower() == 'quit':
-        print("Goodbye! Enjoy your meal :)")
+        print("Goodbye! Enjoy your meal <3")
         break
     ingredients = [ing.strip() for ing in user_input.split(',')]
     titles, recipes = suggest_recipes(ingredients, use_supervised=False)
@@ -83,14 +78,16 @@ while True:
         print("Here are your recipe options:")
         for i, title in enumerate(titles, 1):
             print(f"{i}. {title}")
-        try:
-            while True:
-                choice = int(input("Pick a number: ").strip()) - 1  # Chuyển về index 0-based
-                details = get_recipe_details(choice, recipes)
-                print(f"\n{details}\n")
-                if "Hi! Invalid choice. Please pick a number from the list!" not in details:
-                    break
-        except ValueError:
-            print("Hi! Please enter a number only!\n")
+        while True:
+            try:
+                while True:
+                    choice = int(input("Pick a number: ").strip()) - 1  # Chuyển về index 0-based
+                    details = get_recipe_details(choice, recipes)
+                    print(f"\n{details}\n")
+                    if "Hi! Invalid choice. Please pick a number from the list!" not in details:
+                        break
+                break
+            except ValueError:
+                print("Please enter a number only!\n")
     else:
         print("No recipes found for these ingredients. Try again!\n")
