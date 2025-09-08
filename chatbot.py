@@ -11,10 +11,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
 # Load mô hình và data
-model = joblib.load('E:/CodeFolder/Github_project/Offline_Cooking_Chatbot/recipe_model.pkl')
-vectorizer = joblib.load('E:/CodeFolder/Github_project/Offline_Cooking_Chatbot/vectorizer.pkl')
-X = joblib.load('E:/CodeFolder/Github_project/Offline_Cooking_Chatbot/features_matrix.pkl')
-df = pd.read_pickle('E:/CodeFolder/Github_project/Offline_Cooking_Chatbot/recipes_df.pkl')
+
+model = joblib.load('recipe_model.pkl')
+vectorizer = joblib.load('vectorizer.pkl')
+X = joblib.load('features_matrix.pkl')
+df = pd.read_pickle('recipes_df.pkl')
+
 
 # Simple mapping NER
 ner_map = {
@@ -62,7 +64,7 @@ def get_recipe_details(selected_idx, recipes):
     return "Hi! Invalid choice. Please pick a number from the list!"
 
 # Bot loop with selection
-print("Hi onii-chan! I am Smart Recipe Buddy offline. Type 'quit' to stop.")
+print("Hi! I am Smart Recipe Buddy offline. Type 'quit' to stop.")
 while True:
     user_input = input("What ingredients do you have? (Ex: ga, ca rot, hanh): ").strip()
     if user_input.lower() == 'quit':
@@ -76,7 +78,7 @@ while True:
         for i, title in enumerate(titles, 1):
             print(f"{i}. {title}")
         try:
-            choice = int(input("Pick a number (1-3): ").strip()) - 1  # Chuyển về index 0-based
+            choice = int(input("Pick a number: ").strip()) - 1  # Chuyển về index 0-based
             details = get_recipe_details(choice, recipes)
             print(f"\n{details}\n")
         except ValueError:
